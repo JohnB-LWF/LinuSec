@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 import json
 
 SEVERITY_ORDER = {"low": 0, "medium": 1, "high": 2}
@@ -18,74 +18,68 @@ def max_severity(severities):
     return highest
 
 
-def build_recommendations(system, users, permissions, services, network, logs):
-    recommendations = []
-
-    if system["metrics"]["upgradable_count"] > 0:
-        recommendations.append("Apply pending package updates using apt upgrade.")
-
-    if users["metrics"]["weak_password_account_count"] > 0:
-        recommendations.append("Lock or remediate accounts without passwords.")
-    if users["metrics"]["ssh_weakness_count"] > 0:
-        recommendations.append("Harden SSH settings: disable root login and password authentication.")
-
-    if permissions["metrics"]["world_writable_dir_count"] > 0:
-        recommendations.append("Review and restrict world-writable directories.")
-    if permissions["metrics"]["insecure_home_dir_count"] > 0:
-        recommendations.append("Set home directory permissions to 700 or 750.")
-
-    if services["metrics"]["risky_service_count"] > 0:
-        recommendations.append("Disable risky legacy services (telnet/ftp/rsh/rlogin).")
-    if services["metrics"]["public_listener_count"] > 0:
-        recommendations.append("Limit externally exposed listening services.")
-
-    if not network["metrics"]["firewall_active"]:
-        recommendations.append("Enable UFW and allow only required ports.")
-
-    if logs["metrics"]["failed_login_count"] > 0:
-        recommendations.append("Investigate failed SSH logins and consider fail2ban.")
-    if logs["metrics"]["sudo_failure_count"] > 0:
-        recommendations.append("Audit sudo failures for privilege abuse attempts.")
-
-    if not recommendations:
-        recommendations.append("No major hardening issues detected. Continue routine monitoring.")
-
-    return recommendations
-
-
 def main():
-    system = load_module_report("system")
-    users = load_module_report("users")
-    permissions = load_module_report("permissions")
-    services = load_module_report("services")
-    network = load_module_report("network")
-    logs = load_module_report("logs")
+    module_names = ["system", "users", "permissions", "services", "network", "logs"]
+    modules = {name: load_module_report(name) for name in module_names}
 
-    module_severities = [
-        system["severity"],
-        users["severity"],
-        permissions["severity"],
-        services["severity"],
-        network["severity"],
-        logs["severity"],
-    ]
+    severities = [m["severity"] for m in modules.values()]
+    scores = [m.get("risk_score", 0) for m in modules.values()]
+    overall_severity = max_severity(severities)
+    overall_risk_score = max(scores) if scores else 0
 
-    recommendations = build_recommendations(
-        system=system,
-        users=users,
-        permissions=permissions,
-        services=services,
-        network=network,
-        logs=logs,
-    )
+    high_cats = [n for n, m in modules.items() if m["severity"] == "high"]
+    medium_cats = [n for n, m in modules.items() if m["severity"] == "medium"]
+    low_cats = [n for n, m in modules.items() if m["severity"] == "low"]
+    priority_order = high_cats + medium_cats + low_cats
+
+    # Collect all triggered rules across modules
+    all_triggered_rules = []
+    for name, report in modules.items():
+        for rule in report.get("triggered_rules", []):
+            all_triggered_rules.append(f"{name}: {rule}")
+
+    # Build per-category remediation list (top 2 steps per module, high-severity first)
+    top_remediation = []
+    for name in priority_order:
+        report = modules[name]
+        for step in report.get("remediation", [])[:2]:
+            top_remediation.append({
+                "category": name,
+                "description": step.get("description", ""),
+                "command": step.get("command", ""),
+                "impact": step.get("impact", ""),
+            })
+
+    if not all_triggered_rules:
+        severity_reason = "All categories scored low. No significant issues detected. Continue routine monitoring."
+    else:
+        top_cats = ", ".join(
+            f"{n} ({modules[n].get('severity', 'low')})" for n in priority_order[:3]
+        )
+        severity_reason = (
+            f"Overall {overall_severity.upper()} driven by: {top_cats}."
+        )
 
     report = {
-        "severity": max_severity(module_severities),
-        "metrics": {
-            "overall_severity": max_severity(module_severities),
-            "recommendation_count": len(recommendations),
+        "severity": overall_severity,
+        "risk_score": overall_risk_score,
+        "severity_reason": severity_reason,
+        "triggered_rules": all_triggered_rules,
+        "thresholds": {
+            "high":   "any module severity == high",
+            "medium": "any module severity == medium (and none high)",
+            "low":    "all modules severity == low",
         },
-        "examples": recommendations,
+        "metrics": {
+            "overall_risk_score": overall_risk_score,
+            "highest_risk_category": priority_order[0] if priority_order else "none",
+            "categories_at_high": len(high_cats),
+            "categories_at_medium": len(medium_cats),
+            "categories_at_low": len(low_cats),
+            "recommendation_count": len(top_remediation),
+        },
+        "examples": [r["description"] for r in top_remediation[:10]],
+        "remediation": top_remediation,
     }
 
     with open("tmp/hardening.json", "w", encoding="utf-8") as handle:

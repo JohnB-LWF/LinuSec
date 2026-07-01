@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 import json
 import re
 
@@ -9,7 +9,7 @@ def parse_sections(raw_text):
     for line in raw_text.splitlines():
         stripped = line.strip()
         if stripped.startswith("__") and stripped.endswith("_START__"):
-            current = stripped[len("__") : -len("_START__")]
+            current = stripped[len("__"):-len("_START__")]
             sections[current] = []
             continue
         if stripped.startswith("__") and stripped.endswith("_END__"):
@@ -73,14 +73,47 @@ def build_report(parsed):
     extra_uid0 = max(len(parsed["uid0_users"]) - 1, 0)
     ssh_weakness_count = len(parsed["ssh_weaknesses"])
 
-    severity = "low"
     if weak_count > 0 or extra_uid0 > 0 or ssh_weakness_count >= 2:
         severity = "high"
+        risk_score = min(100, 67 + weak_count * 10 + extra_uid0 * 10 + max(0, ssh_weakness_count - 1) * 5)
     elif ssh_weakness_count == 1:
         severity = "medium"
+        risk_score = min(66, 30 + ssh_weakness_count * 15)
+    else:
+        severity = "low"
+        risk_score = 0
+
+    triggered_rules = []
+    if weak_count > 0:
+        triggered_rules.append(f"weak_password_account_count > 0 (actual: {weak_count})")
+    if extra_uid0 > 0:
+        triggered_rules.append(f"extra UID-0 accounts beyond root (actual: {extra_uid0})")
+    for weakness in parsed["ssh_weaknesses"]:
+        triggered_rules.append(weakness)
+
+    reasons = []
+    if weak_count > 0:
+        reasons.append(f"{weak_count} account(s) have no password (NP status)")
+    if extra_uid0 > 0:
+        reasons.append(f"{extra_uid0} non-root UID-0 account(s) detected")
+    if ssh_weakness_count > 0:
+        reasons.append(f"{ssh_weakness_count} SSH misconfiguration(s) found")
+
+    if reasons:
+        severity_reason = severity.upper() + ": " + "; ".join(reasons) + "."
+    else:
+        severity_reason = "No user account or SSH weaknesses detected."
 
     return {
         "severity": severity,
+        "risk_score": risk_score,
+        "severity_reason": severity_reason,
+        "triggered_rules": triggered_rules,
+        "thresholds": {
+            "high":   "weak_count>0 OR extra_uid0>0 OR ssh_weaknesses>=2  -> risk_score 67-100",
+            "medium": "ssh_weakness_count==1                               -> risk_score 45",
+            "low":    "no weaknesses                                       -> risk_score 0",
+        },
         "metrics": {
             "weak_password_account_count": weak_count,
             "locked_account_count": len(parsed["locked_accounts"]),
@@ -92,6 +125,28 @@ def build_report(parsed):
             "uid0_users": parsed["uid0_users"][:10],
             "ssh_weaknesses": parsed["ssh_weaknesses"][:10],
         },
+        "remediation": [
+            {
+                "description": "Lock accounts without passwords",
+                "command": "sudo passwd -l <username>",
+                "impact": "Prevents unauthorised access via passwordless accounts.",
+            },
+            {
+                "description": "Disable SSH root login",
+                "command": "sudo sed -i 's/^PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config && sudo systemctl restart sshd",
+                "impact": "Eliminates direct root access over SSH.",
+            },
+            {
+                "description": "Disable SSH password authentication",
+                "command": "sudo sed -i 's/^PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config && sudo systemctl restart sshd",
+                "impact": "Forces key-based auth, preventing brute-force password attacks.",
+            },
+            {
+                "description": "Audit all UID-0 accounts",
+                "command": "awk -F: '$3==0{print $1}' /etc/passwd",
+                "impact": "Identifies unauthorised root-level accounts.",
+            },
+        ],
     }
 
 
