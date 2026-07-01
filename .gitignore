@@ -1,0 +1,42 @@
+# Project docs (local only)
+.docs/
+
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Test and tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Build/distribution artifacts
+build/
+dist/
+*.egg-info/
+
+# Runtime and generated outputs
+tmp/
+output/
+outputs/
+
+# Logs (keep sample fixtures)
+*.log
+logs/
+!tests/sample_raw/
+!tests/sample_raw/**
+
+# Editor/OS noise
+.vscode/
+.idea/
+.DS_Store
