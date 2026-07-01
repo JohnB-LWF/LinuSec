@@ -25,11 +25,6 @@ build/
 dist/
 *.egg-info/
 
-# Runtime and generated outputs
-tmp/
-output/
-outputs/
-
 # Logs (keep sample fixtures)
 *.log
 logs/
