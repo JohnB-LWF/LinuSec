@@ -1,0 +1,47 @@
+{
+    "severity": "high",
+    "metrics": {
+        "suid_count": 15,
+        "sgid_count": 7,
+        "world_writable_dir_count": 7,
+        "insecure_home_dir_count": 4
+    },
+    "examples": {
+        "suid": [
+            "/usr/bin/sudo",
+            "/usr/bin/gpasswd",
+            "/usr/bin/chsh",
+            "/usr/bin/passwd",
+            "/usr/bin/chfn",
+            "/usr/bin/umount",
+            "/usr/bin/mount",
+            "/usr/bin/su",
+            "/usr/bin/fusermount3",
+            "/usr/bin/newgrp"
+        ],
+        "sgid": [
+            "/usr/bin/crontab",
+            "/usr/bin/expiry",
+            "/usr/bin/chage",
+            "/usr/bin/ssh-agent",
+            "/usr/lib/x86_64-linux-gnu/utempter/utempter",
+            "/usr/sbin/unix_chkpwd",
+            "/usr/sbin/pam_extrausers_chkpwd"
+        ],
+        "world_writable_dirs": [
+            "/mnt/wsl",
+            "/mnt/c",
+            "/mnt/wslg",
+            "/var/crash",
+            "/var/tmp",
+            "/tmp",
+            "/tmp/.X11-unix"
+        ],
+        "insecure_homes": [
+            "755 /home/johnb/Projects",
+            "755 /home/johnb/.local",
+            "755 /home/PyVM",
+            "755 /home/PyVM/venv"
+        ]
+    }
+}

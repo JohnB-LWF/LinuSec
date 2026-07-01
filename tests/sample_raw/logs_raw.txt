@@ -1,0 +1,13 @@
+__FAILED_LOGINS_START__
+Jun 30 12:00:00 host sshd[111]: Failed password for invalid user test from 10.0.0.1 port 50123 ssh2
+Jun 30 12:01:00 host sshd[112]: Failed password for root from 10.0.0.2 port 50124 ssh2
+Jun 30 12:02:00 host sshd[113]: Failed password for admin from 10.0.0.3 port 50125 ssh2
+__FAILED_LOGINS_END__
+__SUDO_FAILURES_START__
+Jun 30 12:10:00 host sudo: pam_unix(sudo:auth): authentication failure; logname=bob uid=1001
+Jun 30 12:11:00 host sudo: pam_unix(sudo:auth): authentication failure; logname=alice uid=1000
+__SUDO_FAILURES_END__
+__KERNEL_ERRORS_START__
+[1234.100] EXT4-fs error (device sda): ext4_find_entry:1450: inode #2: comm ls: reading directory lblock 0
+[1235.200] audit: backlog limit exceeded
+__KERNEL_ERRORS_END__

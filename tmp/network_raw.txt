@@ -1,0 +1,25 @@
+__OPEN_PORTS_START__
+Netid State  Recv-Q Send-Q  Local Address:Port Peer Address:PortProcess
+udp   UNCONN 0      0          127.0.0.54:53        0.0.0.0:*          
+udp   UNCONN 0      0       127.0.0.53%lo:53        0.0.0.0:*          
+udp   UNCONN 0      0      10.255.255.254:53        0.0.0.0:*          
+udp   UNCONN 0      0           127.0.0.1:323       0.0.0.0:*          
+udp   UNCONN 0      0               [::1]:323          [::]:*          
+tcp   LISTEN 0      4096    127.0.0.53%lo:53        0.0.0.0:*          
+tcp   LISTEN 0      1000   10.255.255.254:53        0.0.0.0:*          
+tcp   LISTEN 0      4096       127.0.0.54:53        0.0.0.0:*          
+__OPEN_PORTS_END__
+__ACTIVE_CONNECTIONS_START__
+Netid State  Recv-Q Send-Q  Local Address:Port Peer Address:PortProcess
+udp   UNCONN 0      0          127.0.0.54:53        0.0.0.0:*          
+udp   UNCONN 0      0       127.0.0.53%lo:53        0.0.0.0:*          
+udp   UNCONN 0      0      10.255.255.254:53        0.0.0.0:*          
+udp   UNCONN 0      0           127.0.0.1:323       0.0.0.0:*          
+udp   UNCONN 0      0               [::1]:323          [::]:*          
+tcp   LISTEN 0      4096    127.0.0.53%lo:53        0.0.0.0:*          
+tcp   LISTEN 0      1000   10.255.255.254:53        0.0.0.0:*          
+tcp   LISTEN 0      4096       127.0.0.54:53        0.0.0.0:*          
+__ACTIVE_CONNECTIONS_END__
+__UFW_STATUS_START__
+ufw command not found
+__UFW_STATUS_END__

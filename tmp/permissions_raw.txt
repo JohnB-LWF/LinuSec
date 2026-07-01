@@ -1,0 +1,44 @@
+__SUID_START__
+/usr/bin/sudo
+/usr/bin/gpasswd
+/usr/bin/chsh
+/usr/bin/passwd
+/usr/bin/chfn
+/usr/bin/umount
+/usr/bin/mount
+/usr/bin/su
+/usr/bin/fusermount3
+/usr/bin/newgrp
+/usr/lib/snapd/snap-confine
+/usr/lib/openssh/ssh-keysign
+/usr/lib/landscape/apt-update
+/usr/lib/polkit-1/polkit-agent-helper-1
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+__SUID_END__
+__SGID_START__
+/usr/bin/crontab
+/usr/bin/expiry
+/usr/bin/chage
+/usr/bin/ssh-agent
+/usr/lib/x86_64-linux-gnu/utempter/utempter
+/usr/sbin/unix_chkpwd
+/usr/sbin/pam_extrausers_chkpwd
+__SGID_END__
+__WORLD_WRITABLE_DIRS_START__
+/mnt/wsl
+/mnt/c
+/mnt/wslg
+/var/crash
+/var/tmp
+/tmp
+/tmp/.X11-unix
+__WORLD_WRITABLE_DIRS_END__
+__HOME_PERMS_START__
+750 /home/johnb
+700 /home/johnb/.copilot
+700 /home/johnb/.cache
+755 /home/johnb/Projects
+755 /home/johnb/.local
+755 /home/PyVM
+755 /home/PyVM/venv
+__HOME_PERMS_END__

@@ -1,0 +1,8 @@
+HOSTNAME=wsl-host
+OS=Ubuntu 24.04 LTS
+KERNEL=6.6.87.1-microsoft-standard-WSL2
+UPTIME=up 1 hour, 5 minutes
+__UPGRADABLE_START__
+openssl/ubuntu-updates 3.0.2 amd64 [upgradable from: 3.0.1]
+curl/ubuntu-updates 8.5.0 amd64 [upgradable from: 8.4.0]
+__UPGRADABLE_END__

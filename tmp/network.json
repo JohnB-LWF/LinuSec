@@ -1,0 +1,33 @@
+{
+    "severity": "high",
+    "metrics": {
+        "open_port_count": 8,
+        "active_connection_count": 8,
+        "firewall_active": false
+    },
+    "examples": {
+        "open_ports": [
+            "udp   UNCONN 0      0          127.0.0.54:53        0.0.0.0:*",
+            "udp   UNCONN 0      0       127.0.0.53%lo:53        0.0.0.0:*",
+            "udp   UNCONN 0      0      10.255.255.254:53        0.0.0.0:*",
+            "udp   UNCONN 0      0           127.0.0.1:323       0.0.0.0:*",
+            "udp   UNCONN 0      0               [::1]:323          [::]:*",
+            "tcp   LISTEN 0      4096    127.0.0.53%lo:53        0.0.0.0:*",
+            "tcp   LISTEN 0      1000   10.255.255.254:53        0.0.0.0:*",
+            "tcp   LISTEN 0      4096       127.0.0.54:53        0.0.0.0:*"
+        ],
+        "active_connections": [
+            "udp   UNCONN 0      0          127.0.0.54:53        0.0.0.0:*",
+            "udp   UNCONN 0      0       127.0.0.53%lo:53        0.0.0.0:*",
+            "udp   UNCONN 0      0      10.255.255.254:53        0.0.0.0:*",
+            "udp   UNCONN 0      0           127.0.0.1:323       0.0.0.0:*",
+            "udp   UNCONN 0      0               [::1]:323          [::]:*",
+            "tcp   LISTEN 0      4096    127.0.0.53%lo:53        0.0.0.0:*",
+            "tcp   LISTEN 0      1000   10.255.255.254:53        0.0.0.0:*",
+            "tcp   LISTEN 0      4096       127.0.0.54:53        0.0.0.0:*"
+        ],
+        "ufw_status": [
+            "ufw command not found"
+        ]
+    }
+}

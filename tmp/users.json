@@ -1,0 +1,16 @@
+{
+    "severity": "low",
+    "metrics": {
+        "weak_password_account_count": 0,
+        "locked_account_count": 0,
+        "uid0_user_count": 1,
+        "ssh_weakness_count": 0
+    },
+    "examples": {
+        "weak_password_accounts": [],
+        "uid0_users": [
+            "root"
+        ],
+        "ssh_weaknesses": []
+    }
+}

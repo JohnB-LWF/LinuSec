@@ -1,0 +1,14 @@
+{
+    "severity": "high",
+    "metrics": {
+        "overall_severity": "high",
+        "recommendation_count": 5
+    },
+    "examples": [
+        "Apply pending package updates using apt upgrade.",
+        "Review and restrict world-writable directories.",
+        "Set home directory permissions to 700 or 750.",
+        "Limit externally exposed listening services.",
+        "Enable UFW and allow only required ports."
+    ]
+}

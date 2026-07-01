@@ -1,0 +1,31 @@
+{
+    "severity": "medium",
+    "metrics": {
+        "running_service_count": 13,
+        "risky_service_count": 0,
+        "public_listener_count": 8,
+        "cron_job_count": 7
+    },
+    "examples": {
+        "risky_services": [],
+        "public_listeners": [
+            "udp   UNCONN 0      0          127.0.0.54:53        0.0.0.0:*",
+            "udp   UNCONN 0      0       127.0.0.53%lo:53        0.0.0.0:*",
+            "udp   UNCONN 0      0      10.255.255.254:53        0.0.0.0:*",
+            "udp   UNCONN 0      0           127.0.0.1:323       0.0.0.0:*",
+            "udp   UNCONN 0      0               [::1]:323          [::]:*",
+            "tcp   LISTEN 0      4096    127.0.0.53%lo:53        0.0.0.0:*",
+            "tcp   LISTEN 0      1000   10.255.255.254:53        0.0.0.0:*",
+            "tcp   LISTEN 0      4096       127.0.0.54:53        0.0.0.0:*"
+        ],
+        "active_cron_jobs": [
+            "SHELL=/bin/sh",
+            "17 *\t* * *\troot\tcd / && run-parts --report /etc/cron.hourly",
+            "25 6\t* * *\troot\ttest -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.daily; }",
+            "47 6\t* * 7\troot\ttest -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.weekly; }",
+            "52 6\t1 * *\troot\ttest -x /usr/sbin/anacron || { cd / && run-parts --report /etc/cron.monthly; }",
+            "30 3 * * 0 root test -e /run/systemd/system || SERVICE_MODE=1 /usr/lib/x86_64-linux-gnu/e2fsprogs/e2scrub_all_cron",
+            "10 3 * * * root test -e /run/systemd/system || SERVICE_MODE=1 /sbin/e2scrub_all -A -r"
+        ]
+    }
+}

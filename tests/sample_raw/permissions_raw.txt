@@ -1,0 +1,15 @@
+__SUID_START__
+/usr/bin/sudo
+/usr/bin/passwd
+__SUID_END__
+__SGID_START__
+/usr/bin/wall
+__SGID_END__
+__WORLD_WRITABLE_DIRS_START__
+/tmp
+/var/tmp
+__WORLD_WRITABLE_DIRS_END__
+__HOME_PERMS_START__
+700 /home/alice
+777 /home/bob
+__HOME_PERMS_END__
