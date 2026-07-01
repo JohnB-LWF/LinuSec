@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
+umask 077
 
 mkdir -p tmp
+chmod 700 tmp
 
 SUID_FILES="$(find / -xdev -type f -perm -4000 2>/dev/null || true)"
 SGID_FILES="$(find / -xdev -type f -perm -2000 2>/dev/null || true)"

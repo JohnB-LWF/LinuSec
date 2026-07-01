@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
+umask 077
 
 mkdir -p tmp
+chmod 700 tmp
 
 OPEN_PORTS="$(ss -tuln 2>/dev/null || true)"
 ACTIVE_CONNECTIONS="$(ss -tunap 2>/dev/null || true)"

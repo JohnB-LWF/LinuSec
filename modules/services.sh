@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
+umask 077
 
 mkdir -p tmp
+chmod 700 tmp
 
 RUNNING_SERVICES=""
 if command -v systemctl >/dev/null 2>&1; then

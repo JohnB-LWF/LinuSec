@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
+umask 077
 
 BASE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$BASE_DIR"
 
 mkdir -p tmp output/reports
+chmod 700 tmp output output/reports
 REPORT="output/reports/audit-$(date +%F-%H%M%S).json"
 
 run_module() {

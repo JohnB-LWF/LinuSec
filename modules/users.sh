@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
+umask 077
 
 mkdir -p tmp
+chmod 700 tmp
 
 PASSWD_STATUS=""
 if passwd -Sa >/dev/null 2>&1; then

@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
+umask 077
 
 mkdir -p tmp
+chmod 700 tmp
 
 HOSTNAME_VALUE="$(hostname 2>/dev/null || echo unknown)"
 if [ -f /etc/os-release ]; then
