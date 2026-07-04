@@ -1,6 +1,6 @@
 ﻿# LinuSec - Linux Audit Tool
 
-```bash
+```
   ___    __             _______            
  |   |  |__.-----.--.--|   _   .-----.----.
  |.  |  |  |     |  |  |   1___|  -__|  __|
@@ -11,6 +11,10 @@
 ```
 
 A hybrid **Bash + Python** Linux security audit application designed to run inside **Ubuntu on WSL**.
+
+[Video Demo](https://www.youtube.com/watch?v=qcdxFT2_cxE)
+
+[Read more on my blog](https://johnbelcher.dev/blog/entries/designing-linusec.html)
 
 ## Features
 
